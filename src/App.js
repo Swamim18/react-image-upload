@@ -8,8 +8,9 @@ class App extends Component {
     return (
       <React.Fragment>
         <Navbar />
+        <hr />
         <main className="container">
-          <div className="App">
+          <div className="jumbotron">
             <Image />
           </div>
         </main>

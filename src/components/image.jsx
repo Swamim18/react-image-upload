@@ -9,7 +9,7 @@ class Image extends Component {
 
   uploadFile = files => {
     // Push all the axios request promise into a single array
-    const uploaders = files.map(file => {
+    const uploaders = files.map((file, id) => {
       // Initial FormData
       const formData = new FormData();
       formData.append("file", file);
@@ -33,9 +33,9 @@ class Image extends Component {
           const fileURL = data.secure_url; //should store this URL for future references the app
           console.log(data);
 
+          //adding into the state
           let updatedImages = [...this.state.images];
           updatedImages.push(fileURL);
-
           this.setState({ images: updatedImages });
         });
     });
@@ -46,23 +46,46 @@ class Image extends Component {
     });
   };
 
+  removeImageHandler = event => {
+    event.preventDefault();
+    let updatedImages = [...this.state.images];
+    updatedImages.splice(event.target.id, 1);
+    this.setState({ images: updatedImages });
+  };
+
   render() {
-    const imageList = this.state.images.map(imgSrc => {
+    const images = this.state.images.map((imgSrc, i) => {
       return (
-        <li>
-          <img src={imgSrc} />
-        </li>
+        <div className="badge">
+          <img style={{ width: 100 }} src={imgSrc} />
+          <br />
+          <button
+            className="btn btn-danger m-2"
+            id={i}
+            onClick={this.removeImageHandler.bind(this)}
+            href="#"
+          >
+            Remove image
+          </button>
+        </div>
       );
     });
     return (
-      <React.Fragment>
-        <Dropzone onDrop={this.uploadFile} multiple accept="image/*">
-          <p>Drop your files here</p>
-        </Dropzone>
-        <div className="App">
-          <ol>{imageList}</ol>
+      <div className="d-flex flex-row ">
+        <div className="col-4 p-2">
+          <Dropzone onDrop={this.uploadFile} multiple accept="image/*">
+            <p className="text-center">Drop your files here</p>
+          </Dropzone>
         </div>
-      </React.Fragment>
+        <div className="col-8 p-2">
+          <div className="row-3 p-2">
+            <h3>Drop 1 or more Images</h3>
+          </div>
+          <div className="row-9 p-2">
+            <div className="column m-2">{images}</div>
+          </div>
+        </div>
+      </div>
     );
   }
 }
