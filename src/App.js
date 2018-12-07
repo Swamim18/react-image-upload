@@ -1,14 +1,19 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import Image from "./components/image";
+import Navbar from "./components/navbar";
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <Image />
-      </div>
+      <React.Fragment>
+        <Navbar />
+        <main className="container">
+          <div className="App">
+            <Image />
+          </div>
+        </main>
+      </React.Fragment>
     );
   }
 }

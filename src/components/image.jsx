@@ -3,6 +3,10 @@ import Dropzone from "react-dropzone";
 import axios from "axios";
 
 class Image extends Component {
+  state = {
+    images: []
+  };
+
   uploadFile = files => {
     // Push all the axios request promise into a single array
     const uploaders = files.map(file => {
@@ -27,6 +31,11 @@ class Image extends Component {
           const data = response.data;
           const fileURL = data.secure_url; //should store this URL for future references the app
           console.log(data);
+
+          let updatedImages = [...this.state.images];
+          updatedImages.push(fileURL);
+
+          this.setState({ images: updatedImages });
         });
     });
 
@@ -37,11 +46,21 @@ class Image extends Component {
   };
 
   render() {
+    const imageList = this.state.images.map(imgSrc => {
+      return (
+        <li>
+          <img src={imgSrc} />
+        </li>
+      );
+    });
     return (
       <React.Fragment>
         <Dropzone onDrop={this.uploadFile} multiple accept="image/*">
           <p>Drop your files here</p>
         </Dropzone>
+        <div className="App">
+          <ol>{imageList}</ol>
+        </div>
       </React.Fragment>
     );
   }
