@@ -14,21 +14,20 @@ class Image extends Component {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("tags", `codeinfuse, medium, gist`);
-      formData.append("upload_preset", process.env.CLOUDINARY_PRESET);
-      formData.append("api_key", process.env.CLOUDINARY_API_KEY);
+      formData.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
+      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
       formData.append("timestamp", (Date.now() / 1000) | 0);
+
+      const url =
+        "https://api.cloudinary.com/v1_1/" +
+        process.env.REACT_APP_CLOUDINARY_CLOUD_NAME +
+        "/image/upload";
 
       // Make an AJAX upload request using Axios
       return axios
-        .post(
-          "https://api.cloudinary.com/v1_1/" +
-            process.env.CLOUDINARY_CLOUD_NAME +
-            "/image/upload",
-          formData,
-          {
-            headers: { "X-Requested-With": "XMLHttpRequest" }
-          }
-        )
+        .post(url, formData, {
+          headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
         .then(response => {
           const data = response.data;
           const fileURL = data.secure_url; //should store this URL for future references the app
